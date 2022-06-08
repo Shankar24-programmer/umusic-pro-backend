@@ -1,0 +1,24 @@
+{
+  "name": "authentication-providers-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev":"nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mongoclient": "^1.0.3",
+    "mongodb": "^4.5.0",
+    "mongoose": "^6.3.2",
+    "router": "^1.3.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
