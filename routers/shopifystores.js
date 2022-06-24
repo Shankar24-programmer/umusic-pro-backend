@@ -5,11 +5,27 @@ import {client1} from '../index.js'
 
 const router = express.Router();
 
-router.post("/", async function (request, response) {
+// router.post("/", async function (request, response) {
+//     const Count1 = await client1.db("umusic").collection("shopify-stores").find().count();
+//     console.log(Count1);
+//     const limit1 = request.body.limit;
+//     const skip1 = request.body.skip;
+
+//     const shop = await client1.db("umusic").collection("shopify-stores").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
+//     // response.send(shop);
+//     const data = {
+//         count : Count1,
+//         value : shop
+//     }
+//     response.send(data);
+// })
+
+
+router.get("/limit/:limit/:skip", async function (request, response) {
     const Count1 = await client1.db("umusic").collection("shopify-stores").find().count();
     console.log(Count1);
-    const limit1 = request.body.limit;
-    const skip1 = request.body.skip;
+    const limit1 = request.params.limit;
+    const skip1 = request.params.skip;
 
     const shop = await client1.db("umusic").collection("shopify-stores").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
     // response.send(shop);
@@ -18,6 +34,7 @@ router.post("/", async function (request, response) {
         value : shop
     }
     response.send(data);
+    
 })
 
 router.get("/:id", async function(request, response) {
@@ -43,7 +60,7 @@ router.put("/:id", async function(request, response){
     response.send(result);
 })
 
-router.post("/getByname", async (req, res) => {
+router.post("/getbyname", async (req, res) => {
     const val = req.body.name
     const regex = new RegExp([val].join(""), "i");
     const allTasks = await client1.db("umusic").collection("shopify-stores").find({ name: { $regex: regex } }).toArray()

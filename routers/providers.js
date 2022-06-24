@@ -7,11 +7,25 @@ import { client2 } from '../index.js'
 
 const router = express.Router();
 
-router.post("/", async function (request, response) {
+// router.post("/limit", async function (request, response) {
+//     const Count1 = await client2.db("umusic").collection("providers").find().count();
+//     console.log(Count1);
+//     const limit1 = request.body.limit;
+//     const skip1 = request.body.skip;
+//     const authpro = await client2.db("umusic").collection("providers").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
+//     // response.send(authpro);
+//     const data = {
+//         count : Count1,
+//         value : authpro
+//     }
+//     response.send(data);
+// })
+
+router.get("/limit/:limit/:skip", async function (request, response) {
     const Count1 = await client2.db("umusic").collection("providers").find().count();
     console.log(Count1);
-    const limit1 = request.body.limit;
-    const skip1 = request.body.skip;
+    const limit1 = request.params.limit;
+    const skip1 = request.params.skip;
     const authpro = await client2.db("umusic").collection("providers").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
     // response.send(authpro);
     const data = {
@@ -19,7 +33,12 @@ router.post("/", async function (request, response) {
         value : authpro
     }
     response.send(data);
+    // console.log(request.params.limit2)
+    // console.log(request.params.skip2)
+
+
 })
+
 
 router.get("/:id", async function (request, response) {
     const authpro = await client2.db("umusic").collection("providers").findOne({ "_id": ObjectId(request.params.id) })

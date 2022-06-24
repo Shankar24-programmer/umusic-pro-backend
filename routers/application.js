@@ -5,9 +5,19 @@ import {client2} from '../index.js'
 
 const router = express.Router();
 
-router.get("/", async function (request, response) {
-    const app = await client2.db("umusic").collection("application").find().toArray();
-    response.send(app);
+router.get("/limit/:limit/:skip", async function (request, response){
+    const Count1 = await client2.db("umusic").collection("application").find().count();
+    console.log(Count1);
+    const limit1 = request.params.limit;
+    const skip1 = request.params.skip;
+    const app = await client2.db("umusic").collection("application").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
+    // response.send(app);
+    const data = {
+        count : Count1,
+        value : app
+    }
+    response.send(data);
+    // console.log(request.params.limit)
 })
 
 router.get("/:id", async function(request, response) {
@@ -32,10 +42,10 @@ router.put("/:id", async function(request, response){
     const result = await client2.db("umusic").collection("application").updateOne({"_id":ObjectId(request.params.id)},{$set:editValue})
     response.send(result);
 })
-router.post("/getByname", async (req, res) => {
+router.post("/getbyname", async (req, res) => {
     const val = req.body.name
     const regex = new RegExp([val].join(""), "i");
-    const allTasks = await client2.db("umusic").collection("providers").find({ name: { $regex: regex } }).toArray()
+    const allTasks = await client2.db("umusic").collection("application").find({ name: { $regex: regex } }).toArray()
     // if(!allTasks || allTasks.length === 0) res.status(400).send({error : "No task was found"})
     // res.status(200).send(allTasks)
     res.send(allTasks)

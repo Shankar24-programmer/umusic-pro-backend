@@ -5,9 +5,23 @@ import {client} from '../index.js'
 
 const router = express.Router();
 
-router.get("/", async function (request, response) {
-    const authpro = await client.db("umusic").collection("authentication-provider").find().toArray();
-    response.send(authpro);
+router.get("/limit/:limit/:skip", async function (request, response) {
+    const Count1 = await client.db("umusic").collection("authentication-provider").find().count();
+    console.log(Count1);
+    const limit1 = request.params.limit;
+    const skip1 = request.params.skip;
+    const authpro = await client.db("umusic").collection("authentication-provider").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
+    // response.send(authpro);
+    const data = {
+        count : Count1,
+        value : authpro
+    }
+    response.send(data);
+    // console.log(request.params.limit);
+    // console.log(request.params.limit2)
+    // console.log(request.params.skip2)
+
+
 })
 
 router.get("/:id", async function(request, response) {
@@ -33,22 +47,14 @@ router.put("/:id", async function(request, response){
     response.send(result);
 })
 
-router.post("/getByname", async function(request, response){
-    try{
-        const result = await client.db("umusic").collection("authentication-provider").findOne({name:request.body.name});
-        console.log(result);
-        if(result){
-            response.send(result);
-        }
-        else{
-            response.send({msg:"no data found"})
-        }
-    }
-    catch(err){
-        console.log(err);
-    }
-    }
-)
+router.post("/getbyname", async function(request, response){
+    const val = request.body.name
+    const regex = new RegExp([val].join(""), "i");
+    const allTasks = await client.db("umusic").collection("authentication-provider").find({ name: { $regex: regex } }).toArray()
+    // if(!allTasks || allTasks.length === 0) res.status(400).send({error : "No task was found"})
+    // res.status(200).send(allTasks)
+    response.send(allTasks)
+})
 
 
 
